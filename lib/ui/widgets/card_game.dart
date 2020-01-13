@@ -52,7 +52,7 @@ class CardGame extends StatelessWidget {
                             child: InkWell(
                                 onTap: () {
                                   //edit name
-                                  Navigator.pop(context);
+                                  print('onTap');
                                   _displayDialog(context);
                                 },
                                 child: TextAlternate(
