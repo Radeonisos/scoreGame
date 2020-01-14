@@ -27,11 +27,11 @@ class ListPlayers extends StatelessWidget {
           BlocScores blocScores = new BlocScores(players[i].id);
           return  Container(
             margin: EdgeInsets.only(right: 2),
-            width: 100,
+            width: 120,
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                TextAlternate(string: players[i].name, align: TextAlign.center,),
+                TextAlternate(string: players[i].name, align: TextAlign.center,size: 25,color: Colors.redAccent,),
                 StreamBuilder<List<Score>>(
                   stream: blocScores.stream,
                   builder: (context, snap) {
