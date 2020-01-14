@@ -6,7 +6,7 @@ import 'bloc.dart';
 
 class BlocPlayers extends Bloc {
 
-  final _streamController = StreamController<List<Player>>;
+  final _streamController = StreamController<List<Player>>();
   
   Sink<List<Player>> get sink => _streamController.sink;
   Stream<List<Player>> get stream => _streamController.stream;
