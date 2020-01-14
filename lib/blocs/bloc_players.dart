@@ -5,7 +5,6 @@ import 'package:score_games/models/player.dart';
 import 'bloc.dart';
 
 class BlocPlayers extends Bloc {
-
   final _streamController = StreamController<List<Player>>();
   
   Sink<List<Player>> get sink => _streamController.sink;
