@@ -1,66 +1,107 @@
 import 'package:flutter/material.dart';
-import 'package:score_games/blocs/bloc_players.dart';
 import 'package:score_games/blocs/bloc_scores.dart';
-import 'package:score_games/models/player.dart';
 import 'package:score_games/models/score.dart';
 import 'package:score_games/ui/widgets/BorderAll.dart';
-import 'package:score_games/ui/widgets/card_game.dart';
 import 'package:score_games/ui/widgets/text_alternate.dart';
 
 class ListScores extends StatelessWidget {
-
   List<Score> scores;
 
   BlocScores bloc;
+
+  // ajout streamBuilder sur cette page pour refresh les widgets correctement
 
   ListScores(this.scores, this.bloc);
 
   @override
   Widget build(BuildContext context) {
-
     return new ListView.builder(
         itemCount: scores.length,
         shrinkWrap: true,
-        itemBuilder: (context, i){
-          return  Container(
-            height: 30,
-            decoration: BorderAll().myBoxDecoration(), //       <--- BoxDecoration here
-            child:  new Material(
-              child: new InkWell(
-                onTap: (){
-                  _showDialog(context, scores[i].point);
-                },
-                child: new Container(
-                  child: TextAlternate(
-                    string: scores[i].point,
-                    align: TextAlign.center,
-                    size: 22,
-                  ),
-                ),
+        itemBuilder: (context, i) {
+          return Dismissible(
+              key: Key(scores[i].point),
+              background: Container(
+                color: Colors.red,
+                alignment: AlignmentDirectional.centerEnd,
+                child: Icon(Icons.delete),
               ),
-              color: Colors.transparent,
-            ),
-          );
+              onDismissed: (direction){
+                bloc.deleteScore(scores[i]);
+              },
+              child: Container(
+                height: 30,
+                width: 120,
+                decoration: BorderAll().myBoxDecoration(),
+                //       <--- BoxDecoration here
+                child: new Material(
+                  child: new InkWell(
+                    onTap: () {
+                      print(scores[i].id);
+                      print(scores[i].point);
+
+                      _showDialog(context, scores[i]);
+                    },
+                    child: new Container(
+                      child: TextAlternate(
+                        string: scores[i].point,
+                        align: TextAlign.center,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                  color: Colors.transparent,
+                ),
+              ));
         });
   }
 
+  void addScore(String point, Score score) {
+    score.point = point;
+    bloc.addScore(score);
+  }
 
-
-  void _showDialog(BuildContext context, String text) {
+  void _showDialog(BuildContext context, Score score) {
     // flutter defined function
+    String point;
+    TextEditingController _textFieldController = TextEditingController();
+    _textFieldController.text = score.point;
     showDialog(
       context: context,
       builder: (BuildContext buildContext) {
         // return object of type Dialog
-        return AlertDialog(
+        return SimpleDialog(
           title: new Text("Score:"),
-          content: new Text(text),
-          actions: <Widget>[
+          children: <Widget>[
             // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Close"),
+            new TextField(
+              controller: _textFieldController,
+              onChanged: (String data) {
+                point = data;
+              },
+              onSubmitted: (String data) {
+                addScore(point, score);
+                Navigator.pop(buildContext);
+              },
+            ),
+            new SimpleDialogOption(
+              child: new Text('OK'),
               onPressed: () {
-                Navigator.of(buildContext).pop();
+                addScore(point, score);
+                Navigator.pop(context);
+              },
+            ),
+            new SimpleDialogOption(
+              child: new Text('Annuler'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new SimpleDialogOption(
+              child: new Text('Supprimer'),
+              onPressed: () {
+                bloc.deleteScore(score);
+                Navigator.pop(context);
               },
             ),
           ],
@@ -69,4 +110,3 @@ class ListScores extends StatelessWidget {
     );
   }
 }
-

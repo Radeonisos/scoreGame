@@ -6,6 +6,7 @@ import 'package:score_games/models/score.dart';
 import 'package:score_games/ui/widgets/card_game.dart';
 import 'package:score_games/ui/widgets/list_scores.dart';
 import 'package:score_games/ui/widgets/no_data.dart';
+import 'package:score_games/ui/widgets/separator.dart';
 import 'package:score_games/ui/widgets/text_alternate.dart';
 
 class ListPlayers extends StatelessWidget {
@@ -43,6 +44,18 @@ class ListPlayers extends StatelessWidget {
                       return Expanded(
                           child: ListScores(snap.data,blocScores));
                     }
+                  },
+                ),
+                Separator(),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  color: Colors.blue,
+                  tooltip: "Ajout d'un score",
+                  onPressed: () {
+                    Score s = new Score();
+                    s.player = players[i].id;
+                    s.point = '+10';
+                    blocScores.addScore(s);
                   },
                 ),
               ],
