@@ -15,6 +15,11 @@ class BlocPlayers extends Bloc {
     featchPlayers(player.game);
   }
 
+  deletePlayer(Player player) async {
+  final players = await DataBaseClient().deletePlayer(player.id);
+  featchPlayers(player.game);
+  }
+
   featchPlayers(int id) async{
     final players = await DataBaseClient().allPlayersFromGame(id);
     sink.add(players);

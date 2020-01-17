@@ -20,7 +20,7 @@ class ListScores extends StatelessWidget {
         shrinkWrap: true,
         itemBuilder: (context, i) {
           return Dismissible(
-              key: Key(scores[i].point),
+              key: Key('${scores[i].id}'),
               background: Container(
                 color: Colors.red,
                 alignment: AlignmentDirectional.centerEnd,
@@ -33,7 +33,6 @@ class ListScores extends StatelessWidget {
                 height: 30,
                 width: 120,
                 decoration: BorderAll().myBoxDecoration(),
-                //       <--- BoxDecoration here
                 child: new Material(
                   child: new InkWell(
                     onTap: () {
